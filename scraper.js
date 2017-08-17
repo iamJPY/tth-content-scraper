@@ -15,8 +15,8 @@ let date = new Date();
 var split = new Date().toString().split(" ");
 var timeZoneFormatted = split[split.length - 2] + " " + split[split.length - 1];
 
+/** Convert data to CSV */
 let convertData = data => {
-    /** Convert data to CSV */
     converter.json2csv(data, function(err, csv) {
       if (err) { console.log('Data cannot be converted'); }
 
@@ -56,25 +56,24 @@ scrapeIt(`${url}/shirts.php`, {
                 selector: ".shirt-picture img",
                 attr: "src"
             }
-        }).then(page => {
-            page.URL = `${url}/${uri}`;
-            page.Time = new Date().toLocaleTimeString();
-            data.push(page);
-            convertData(data);
+        }).then(itemDetails => {
+            itemDetails.URL = `${url}/${uri}`;
+            itemDetails.Time = new Date().toLocaleTimeString();
+            data.push(itemDetails); /** Add details object to data array */
+            convertData(data); /** Call function to convert data array to CSV */
         }).catch(function(err) {
-          console.log(`There’s been a 404 error. Cannot connect to http://shirts4mike.com/${uri}`);
-
+          /** If an error, log message to file */
           if (err) {
             fs.appendFileSync('./scraper-error.log', `[${days[date.getDay()]} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()} ${timeZoneFormatted}] ${err}\r`);
           }
+          console.log(`There’s been a 404 error. Cannot connect to http://shirts4mike.com/${uri}`);
         });
     }
-
-/** Error handler */
+  /** Error handler */
 }).catch(function(err) {
-  console.log('There’s been a 404 error. Cannot connect to the to http://shirts4mike.com.');
-
+  /** If en error occurs, log message to file */
   if (err) {
     fs.appendFileSync('./scraper-error.log', `[${days[date.getDay()]} ${months[date.getMonth()]} ${date.getFullYear()} ${date.getUTCHours()}:${date.getUTCMinutes()}:${date.getUTCSeconds()} ${timeZoneFormatted}] ${err}\r`);
   }
+  console.log('There’s been a 404 error. Cannot connect to the to http://shirts4mike.com.');
 });
