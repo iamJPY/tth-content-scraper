@@ -1,6 +1,9 @@
 Build A Content Scraper
 ========================
 
+## Setup and run
+Simply run `npm install` in the root of the project and then `npm start` in your terminal.
+
 ## Project Instructions
 - [x] Create a scraper.js file that will contain your command line application. Your project should also include a package.json file that includes your project’s dependencies. The npm install command should install your dependencies.
 - [x] Program your scraper to check for a folder called ‘data’. If the folder doesn’t exist, the scraper should create one. If the folder does exist, the scraper should do nothing.
